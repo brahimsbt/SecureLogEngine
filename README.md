@@ -55,6 +55,7 @@ log_engine/
   exceptions.py          erreurs du programme
   cli.py                 ligne de commande
   ingestion/readers.py   lecture des fichiers
+  parsers.py             conversion des lignes en dictionnaires
 data/samples/            fichiers de logs d'exemple
 scripts/memory_demo.py   démonstration de la mémoire utilisée
 tests/                   tests pytest
