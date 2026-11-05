@@ -1,0 +1,14 @@
+{"timestamp": "2026-11-04T08:02:10Z", "level": "INFO", "src_ip": "10.0.0.15", "src_port": 50200, "protocol": "TCP", "user": "alice", "event": "HTTP_REQUEST", "code": 200, "message": "GET /dashboard"}
+{"timestamp": "2026-11-04T08:06:31Z", "level": "INFO", "src_ip": "10.0.0.22", "src_port": 50910, "protocol": "TCP", "user": "bob", "event": "HTTP_REQUEST", "code": 200, "message": "GET /reports/weekly"}
+{"timestamp": "2026-11-04T08:09:02Z", "level": "WARNING", "src_ip": "198.51.100.77", "src_port": 60001, "protocol": "TCP", "user": null, "event": "HTTP_ERROR", "code": 404, "message": "GET /wp-login.php"}
+{"timestamp": "2026-11-04T08:09:03Z", "level": "WARNING", "src_ip": "198.51.100.77", "src_port": 60002, "protocol": "TCP", "user": null, "event": "HTTP_ERROR", "code": 404, "message": "GET /.env"}
+{"timestamp": "2026-11-04T08:09:04Z", "level": "WARNING", "src_ip": "198.51.100.77", "src_port": 60003, "protocol": "TCP", "user": null, "event": "HTTP_ERROR", "code": 404, "message": "GET /admin/config.php"}
+{"timestamp": "2026-11-04T08:13:05Z", "level": "ERROR", "src_ip": "203.0.113.45", "src_port": 41020, "protocol": "TCP", "user": "admin", "event": "ACCESS_DENIED", "code": 403, "message": "GET /admin/users/export"}
+{"timestamp": "2026-11-04T08:14:40Z", "level": "ERROR", "src_ip": "10.0.0.22", "src_port": 50990, "protocol": "TCP", "user": "bob", "event": "HTTP_ERROR", "code": 500, "message": "POST /api/upload: internal server error"}
+
+{"timestamp": "2026-11-04T08:22:18Z", "level": "CRITICAL", "src_ip": "127.0.0.1", "src_port": 5432, "protocol": "TCP", "user": null, "event": "SERVICE_FAILURE", "code": 503, "message": "database connection pool exhausted"}
+{"timestamp": "2026-11-04T08:25:00Z", "level": "INFO", "src_ip": "127.0.0.1", "src_port": 5432, "protocol": "TCP", "user": null, "event": "SERVICE_START", "code": 200, "message": "database connection pool restored"}
+{"timestamp": "2026-11-04T08:33:51Z", "level": "INFO", "src_ip": "10.0.0.31", "src_port": 51100, "protocol": "TCP", "user": "carol", "event": "HTTP_REQUEST", "code": 200, "message": "GET /settings"}
+{"timestamp": "2026-11-04T08:50:00Z", "level": "ERROR", "src_ip": 
+{"timestamp": "2026-11-04T08:52:12Z", "src_ip": "10.0.0.40", "src_port": 52100, "protocol": "TCP", "user": "dave", "event": "HTTP_REQUEST", "code": 200}
+{"timestamp": "2026-11-04T08:55:43Z", "level": "INFO", "src_ip": "10.0.0.40", "src_port": 52104, "protocol": "TCP", "user": "dave", "event": "HTTP_REQUEST", "code": 201, "message": "POST /api/tickets"}

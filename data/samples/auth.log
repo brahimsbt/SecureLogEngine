@@ -1,0 +1,24 @@
+2026-11-04T08:00:00Z | INFO | 127.0.0.1:22/TCP | - | SERVICE_START | {"service": "sshd", "pid": 1021}
+2026-11-04T08:03:12Z | INFO | 10.0.0.15:50122/TCP | alice | AUTH_SUCCESS | {"method": "password"}
+2026-11-04T08:05:47Z | WARNING | 10.0.0.22:50877/TCP | bob | AUTH_FAILURE | {"reason": "bad_password", "attempt": 1}
+2026-11-04T08:05:55Z | INFO | 10.0.0.22:50879/TCP | bob | AUTH_SUCCESS | {"method": "password"}
+2026-11-04T08:12:01Z | WARNING | 203.0.113.45:41001/TCP | admin | AUTH_FAILURE | {"reason": "bad_password", "attempt": 1}
+2026-11-04T08:12:03Z | WARNING | 203.0.113.45:41003/TCP | admin | AUTH_FAILURE | {"reason": "bad_password", "attempt": 2}
+2026-11-04T08:12:05Z | WARNING | 203.0.113.45:41005/TCP | admin | AUTH_FAILURE | {"reason": "bad_password", "attempt": 3}
+2026-11-04T08:12:06Z | INFO | 10.0.0.40:52011/TCP | dave | AUTH_SUCCESS | {"method": "publickey"}
+2026-11-04T08:12:07Z | WARNING | 203.0.113.45:41007/TCP | admin | AUTH_FAILURE | {"reason": "bad_password", "attempt": 4}
+2026-11-04T08:12:09Z | WARNING | 203.0.113.45:41009/TCP | admin | AUTH_FAILURE | {"reason": "bad_password", "attempt": 5}
+2026-11-04T08:12:11Z | WARNING | 203.0.113.45:41011/TCP | admin | AUTH_FAILURE | {"reason": "bad_password", "attempt": 6}
+2026-11-04T08:12:14Z | INFO | 203.0.113.45:41013/TCP | admin | AUTH_SUCCESS | {"method": "password"}
+2026-11-04T08:12:30Z | CRITICAL | 203.0.113.45:41013/TCP | admin | PRIVILEGE_ESCALATION | {"command": "sudo su -", "target_user": "root"}
+
+2026-11-04T08:20:02Z | WARNING | 198.51.100.23:55120/TCP | root | AUTH_FAILURE | {"reason": "invalid_user", "attempt": 1}
+2026-11-04T08:20:05Z | WARNING | 198.51.100.23:55124/TCP | root | AUTH_FAILURE | {"reason": "invalid_user", "attempt": 2}
+2026-11-04T08:20:09Z | WARNING | 198.51.100.23:55130/TCP | root | AUTH_FAILURE | {"reason": "invalid_user", "attempt": 3}
+kernel: [ 4521.337812] eth0: link is up 1000 Mbps full duplex
+2026-11-04T08:31:44Z | INFO | 10.0.0.31:51010/TCP | carol | AUTH_SUCCESS | {"method": "publickey"}
+2026-11-04T08:35:10Z | ERROR | 10.0.0.31:51010/TCP | carol | ACCESS_DENIED | {"resource": "/etc/shadow"}
+2026-11-04T08:40:00Z | ERROR | 10.0.0.12
+2026-11-04T08:45:21Z | WARNING | 10.0.0.15:50300/TCP | alice | AUTH_FAILURE | Password expired for user alice
+2026-11-04T08:46:02Z | INFO | 10.0.0.15:50302/TCP | alice | CONFIG_CHANGE | {"setting": "password", "action": "updated"}
+2026-11-04T09:00:00Z | INFO | 127.0.0.1:22/TCP | - | SERVICE_STOP | {"service": "sshd", "reason": "maintenance"}
