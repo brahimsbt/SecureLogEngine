@@ -3,7 +3,11 @@
 import json
 from datetime import datetime
 
-from log_engine.models import JSONL_REQUIRED_KEYS, TEXT_SEPARATOR
+from log_engine.models import (
+    JSONL_REQUIRED_KEYS,
+    SUPPORTED_PROTOCOLS,
+    TEXT_SEPARATOR,
+)
 
 
 def parse_timestamp(text: str):
@@ -11,18 +15,31 @@ def parse_timestamp(text: str):
     return datetime.strptime(text, "%Y-%m-%dT%H:%M:%SZ")
 
 
+def make_connection(ip: str, port, protocol: str):
+    """Crée le tuple (ip, port, protocole) après avoir vérifié les valeurs."""
+    port = int(port)
+    if port < 0 or port > 65535:
+        raise ValueError(f"Port invalide : {port}")
+    if protocol not in SUPPORTED_PROTOCOLS:
+        raise ValueError(f"Protocole inconnu : {protocol}")
+    return (ip, port, protocol)
+
+
 def parse_connection(text: str):
     """Découpe 203.0.113.45:41001/TCP en tuple (ip, port, protocole)."""
     address, protocol = text.split("/")
     ip, port = address.split(":")
-    return (ip, int(port), protocol)
+    return make_connection(ip, port, protocol)
 
 
 def parse_payload(text: str):
-    """Renvoie un dictionnaire si le texte est du JSON, sinon le texte."""
-    if text.startswith("{"):
+    """Renvoie un dictionnaire si le JSON est valide, sinon le texte brut."""
+    if not text.startswith("{"):
+        return text
+    try:
         return json.loads(text)
-    return text
+    except json.JSONDecodeError:
+        return text
 
 
 def parse_text_line(line: str):
@@ -34,9 +51,10 @@ def parse_text_line(line: str):
     try:
         timestamp = parse_timestamp(fields[0])
         connection = parse_connection(fields[2])
-        payload = parse_payload(fields[5])
     except ValueError:
         return None
+
+    payload = parse_payload(fields[5])
 
     user = fields[3]
     if user == "-":
@@ -57,7 +75,9 @@ def parse_json_line(line: str):
     try:
         data = json.loads(line)
         timestamp = parse_timestamp(data["timestamp"])
-        connection = (data["src_ip"], int(data["src_port"]), data["protocol"])
+        connection = make_connection(
+            data["src_ip"], data["src_port"], data["protocol"]
+        )
         severity = data["level"]
         event = data["event"]
     except (ValueError, KeyError, TypeError):
@@ -86,7 +106,7 @@ def parse_csv_line(line: str):
 
     try:
         timestamp = parse_timestamp(fields[0])
-        source_port = int(fields[2])
+        connection = make_connection(fields[1], fields[2], fields[3])
         destination_port = int(fields[4])
     except ValueError:
         return None
@@ -101,7 +121,7 @@ def parse_csv_line(line: str):
     return {
         "timestamp": timestamp,
         "severity": severity,
-        "connection": (fields[1], source_port, fields[3]),
+        "connection": connection,
         "user": None,
         "event": event,
         "payload": {"dst_port": destination_port},

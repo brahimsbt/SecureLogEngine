@@ -2,11 +2,15 @@
 
 from datetime import datetime
 
+import pytest
+
 from log_engine.ingestion.readers import read_lines
 from log_engine.parsers import (
+    make_connection,
     parse_connection,
     parse_csv_line,
     parse_json_line,
+    parse_payload,
     parse_text_line,
     parse_timestamp,
 )
@@ -162,3 +166,61 @@ def test_sample_files_are_parsed():
     assert (
         count_valid_lines("data/samples/connections.csv", parse_csv_line) == 15
     )
+
+
+def test_make_connection_converts_port_to_int():
+    """Le port est converti en entier dans le tuple."""
+    assert make_connection("10.0.0.5", "22", "TCP") == ("10.0.0.5", 22, "TCP")
+
+
+def test_make_connection_rejects_bad_values():
+    """Un port hors limites ou un protocole inconnu lève ValueError."""
+    with pytest.raises(ValueError):
+        make_connection("10.0.0.5", "99999", "TCP")
+    with pytest.raises(ValueError):
+        make_connection("10.0.0.5", "-1", "TCP")
+    with pytest.raises(ValueError):
+        make_connection("10.0.0.5", "22", "XYZ")
+
+
+def test_connection_is_a_tuple():
+    """Les métadonnées de connexion sont un tuple, donc non modifiables."""
+    connection = parse_connection("10.0.0.5:22/TCP")
+    assert type(connection) is tuple
+    with pytest.raises(TypeError):
+        connection[1] = 80
+
+
+def test_parse_payload():
+    """JSON valide -> dictionnaire ; texte ou JSON cassé -> texte brut."""
+    assert parse_payload('{"a": 1}') == {"a": 1}
+    assert parse_payload("Password expired") == "Password expired"
+    assert parse_payload("{cassé") == "{cassé"
+
+
+def test_broken_json_payload_keeps_the_line():
+    """Un payload JSON cassé ne fait plus perdre la ligne."""
+    line = (
+        "2026-11-04T08:12:01Z | WARNING | 10.0.0.5:22/TCP | bob "
+        "| AUTH_FAILURE | {cassé"
+    )
+    record = parse_text_line(line)
+    assert record["user"] == "bob"
+    assert record["payload"] == "{cassé"
+
+
+def test_bad_connection_makes_line_invalid():
+    """Un port ou un protocole invalide rend la ligne invalide."""
+    text_line = (
+        "2026-11-04T08:12:01Z | WARNING | 10.0.0.5:99999/TCP | bob "
+        "| AUTH_FAILURE | {}"
+    )
+    json_line = (
+        '{"timestamp": "2026-11-04T08:13:05Z", "level": "ERROR", '
+        '"src_ip": "10.0.0.5", "src_port": 22, "protocol": "XYZ", '
+        '"event": "ACCESS_DENIED"}'
+    )
+    csv_line = "2026-11-04T08:08:41Z,10.0.0.5,70000,TCP,22,REJECTED"
+    assert parse_text_line(text_line) is None
+    assert parse_json_line(json_line) is None
+    assert parse_csv_line(csv_line) is None
