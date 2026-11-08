@@ -63,6 +63,7 @@ log_engine/
   ip_analysis.py         analyse des IP avec set et frozenset
   bruteforce.py          détection des attaques par force brute
   rules.py               moteur de règles de sécurité
+  audit.py               audit des variables avec globals() et locals()
 data/samples/            fichiers de logs d'exemple
 scripts/memory_demo.py   démonstration de la mémoire utilisée
 tests/                   tests pytest
@@ -97,6 +98,6 @@ programme.
 - [x] Statistiques (`set`, `frozenset`, `defaultdict`)
 - [x] Détection de force brute
 - [x] Moteur de règles (`*args`, `**kwargs`)
-- [ ] Audit (`globals()`, `locals()`)
+- [x] Audit (`globals()`, `locals()`)
 - [ ] Interface en ligne de commande complète
 - [ ] Rapport final
