@@ -59,6 +59,7 @@ log_engine/
   filters.py             nettoyage des données avec filter()
   normalizer.py          normalisation des champs avec map()
   router.py              routage des événements avec match-case
+  aggregation.py         comptage des événements avec defaultdict
 data/samples/            fichiers de logs d'exemple
 scripts/memory_demo.py   démonstration de la mémoire utilisée
 tests/                   tests pytest
