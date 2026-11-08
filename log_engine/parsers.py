@@ -74,6 +74,14 @@ def parse_json_line(line: str):
     """Convertit une ligne de app_events.jsonl en dictionnaire, ou None."""
     try:
         data = json.loads(line)
+    except ValueError:
+        return None
+    return parse_event_dict(data)
+
+
+def parse_event_dict(data: dict):
+    """Convertit un dictionnaire JSON en enregistrement, ou renvoie None."""
+    try:
         timestamp = parse_timestamp(data["timestamp"])
         connection = make_connection(
             data["src_ip"], data["src_port"], data["protocol"]
@@ -101,6 +109,11 @@ def parse_json_line(line: str):
 def parse_csv_line(line: str):
     """Convertit une ligne de connections.csv en dictionnaire, ou None."""
     fields = line.split(",")
+    return parse_connection_fields(tuple(fields))
+
+
+def parse_connection_fields(fields: tuple):
+    """Convertit un tuple de 6 champs CSV en enregistrement, ou None."""
     if len(fields) != 6:
         return None
 

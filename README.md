@@ -58,6 +58,7 @@ log_engine/
   parsers.py             conversion des lignes en dictionnaires
   filters.py             nettoyage des données avec filter()
   normalizer.py          normalisation des champs avec map()
+  router.py              routage des événements avec match-case
 data/samples/            fichiers de logs d'exemple
 scripts/memory_demo.py   démonstration de la mémoire utilisée
 tests/                   tests pytest
@@ -87,8 +88,8 @@ programme.
 - [x] Formats de logs et données d'exemple
 - [x] Lecture des fichiers avec un générateur
 - [x] Lecture de plusieurs fichiers (`yield from`)
-- [ ] Parsing et routage (`match-case`)
-- [ ] Filtrage et transformation (`map`, `filter`, `lambda`)
+- [x] Parsing et routage (`match-case`)
+- [x] Filtrage et transformation (`map`, `filter`, `lambda`)
 - [ ] Statistiques (`set`, `frozenset`, `defaultdict`)
 - [ ] Détection de force brute
 - [ ] Moteur de règles (`*args`, `**kwargs`)
