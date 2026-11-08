@@ -60,6 +60,7 @@ log_engine/
   normalizer.py          normalisation des champs avec map()
   router.py              routage des événements avec match-case
   aggregation.py         comptage des événements avec defaultdict
+  ip_analysis.py         analyse des IP avec set et frozenset
 data/samples/            fichiers de logs d'exemple
 scripts/memory_demo.py   démonstration de la mémoire utilisée
 tests/                   tests pytest
@@ -91,7 +92,7 @@ programme.
 - [x] Lecture de plusieurs fichiers (`yield from`)
 - [x] Parsing et routage (`match-case`)
 - [x] Filtrage et transformation (`map`, `filter`, `lambda`)
-- [ ] Statistiques (`set`, `frozenset`, `defaultdict`)
+- [x] Statistiques (`set`, `frozenset`, `defaultdict`)
 - [ ] Détection de force brute
 - [ ] Moteur de règles (`*args`, `**kwargs`)
 - [ ] Audit (`globals()`, `locals()`)
