@@ -93,7 +93,7 @@ def test_error_can_be_caught_with_base_class(tmp_path):
 @pytest.mark.parametrize(
     "name, expected",
     [
-        ("auth.log", 24),
+        ("auth.log", 26),
         ("app_events.jsonl", 14),
         ("connections.csv", 17),
         ("blacklist.txt", 4),
@@ -130,7 +130,7 @@ def test_read_sources_on_sample_files():
         "data/samples/connections.csv",
     ]
     lines = list(read_sources(paths))
-    assert len(lines) == 24 + 14 + 17
+    assert len(lines) == 26 + 14 + 17
 
 
 def test_missing_file_is_skipped_with_warning(tmp_path, caplog):

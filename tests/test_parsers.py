@@ -158,7 +158,7 @@ def count_valid_lines(path, parser):
 
 def test_sample_files_are_parsed():
     """Seules les lignes volontairement cassées des exemples sont rejetées."""
-    assert count_valid_lines("data/samples/auth.log", parse_text_line) == 21
+    assert count_valid_lines("data/samples/auth.log", parse_text_line) == 23
     assert (
         count_valid_lines("data/samples/app_events.jsonl", parse_json_line)
         == 11

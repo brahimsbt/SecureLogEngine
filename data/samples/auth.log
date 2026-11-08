@@ -21,4 +21,6 @@ kernel: [ 4521.337812] eth0: link is up 1000 Mbps full duplex
 2026-11-04T08:40:00Z | ERROR | 10.0.0.12
 2026-11-04T08:45:21Z | WARNING | 10.0.0.15:50300/TCP | alice | AUTH_FAILURE | Password expired for user alice
 2026-11-04T08:46:02Z | INFO | 10.0.0.15:50302/TCP | alice | CONFIG_CHANGE | {"setting": "password", "action": "updated"}
+2026-11-04T08:47:00Z | warning | 10.0.0.22:50990/TCP | Bob  | auth_failure | {"reason": "bad_password"}
+2026-11-04T08:48:00Z | Info | 10.0.0.22:50992/TCP |  BOB | Auth_Success | {"method": "password"}
 2026-11-04T09:00:00Z | INFO | 127.0.0.1:22/TCP | - | SERVICE_STOP | {"service": "sshd", "reason": "maintenance"}

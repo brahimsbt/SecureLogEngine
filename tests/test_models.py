@@ -53,8 +53,8 @@ def test_text_sample_follows_format():
             fields = line.rstrip("\n").split(TEXT_SEPARATOR, 5)
             if len(fields) != 6:
                 continue
-            assert fields[1] in SEVERITY_LEVELS
-            assert fields[4] in KNOWN_EVENTS
+            assert fields[1].strip().upper() in SEVERITY_LEVELS
+            assert fields[4].strip().upper() in KNOWN_EVENTS
             protocol = fields[2].split("/")[-1]
             assert protocol in SUPPORTED_PROTOCOLS
             checked += 1

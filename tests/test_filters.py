@@ -54,15 +54,15 @@ def test_filters_are_lazy():
 
 
 def test_cleaning_auth_log():
-    """Sur auth.log : 1 ligne vide retirée, puis 2 lignes invalides."""
+    """Sur auth.log : ligne vide, lignes invalides et niveaux mal écrits."""
     lines = remove_empty_lines(read_sources(["data/samples/auth.log"]))
     lines = list(lines)
-    assert len(lines) == 23
+    assert len(lines) == 25
 
     records = []
     for source, number, line in lines:
         records.append(parse_text_line(line))
-    assert len(records) == 23
+    assert len(records) == 25
 
     records = keep_known_severity(remove_invalid(records))
     assert len(list(records)) == 21
