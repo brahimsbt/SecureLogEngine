@@ -8,7 +8,7 @@ from log_engine.bruteforce import (
     group_attempts_by_ip,
     has_consecutive_failures,
 )
-from tests.test_aggregation import load_sample_records
+from log_engine.pipeline import DEFAULT_FILES, process_files
 
 
 def make_record(ip, event):
@@ -71,7 +71,7 @@ def test_invalid_threshold():
 
 def test_detection_on_sample_files():
     """Le seuil change les IP détectées dans les fichiers d'exemple."""
-    records = load_sample_records()
+    records = list(process_files(DEFAULT_FILES))
     assert detect_brute_force(records) == {"203.0.113.45"}
     assert detect_brute_force(records, threshold=3) == {
         "203.0.113.45",
@@ -143,7 +143,7 @@ def test_describe_attacks_with_no_attack():
 
 def test_describe_attacks_on_sample_files():
     """L'attaque de 203.0.113.45 sur admin a réussi après 6 échecs."""
-    records = load_sample_records()
+    records = list(process_files(DEFAULT_FILES))
     assert describe_attacks(records) == [
         {
             "ip": "203.0.113.45",

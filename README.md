@@ -64,6 +64,7 @@ log_engine/
   bruteforce.py          détection des attaques par force brute
   rules.py               moteur de règles de sécurité
   audit.py               audit des variables avec globals() et locals()
+  pipeline.py            chaîne complète de traitement en flux
 data/samples/            fichiers de logs d'exemple
 scripts/memory_demo.py   démonstration de la mémoire utilisée
 tests/                   tests pytest

@@ -8,7 +8,7 @@ from log_engine.ip_analysis import (
     error_ips,
     load_blacklist,
 )
-from tests.test_aggregation import load_sample_records
+from log_engine.pipeline import DEFAULT_FILES, process_files
 
 
 def make_record(ip, severity):
@@ -79,7 +79,7 @@ def test_set_operations():
 
 def test_analysis_on_sample_files():
     """Analyse des IP sur les fichiers d'exemple."""
-    records = load_sample_records()
+    records = list(process_files(DEFAULT_FILES))
     blacklist = load_blacklist("data/samples/blacklist.txt")
     active = active_ips(records)
     errors = error_ips(records)

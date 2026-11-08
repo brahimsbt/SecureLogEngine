@@ -7,10 +7,7 @@ from log_engine.aggregation import (
     count_by_severity,
     count_by_user,
 )
-from log_engine.filters import keep_known_severity, remove_invalid
-from log_engine.ingestion.readers import read_sources
-from log_engine.normalizer import normalize_records
-from log_engine.router import route_line
+from log_engine.pipeline import DEFAULT_FILES, process_files
 
 RECORDS = [
     {"user": "alice", "severity": "INFO", "event": "AUTH_SUCCESS"},
@@ -51,25 +48,9 @@ def test_empty_list_gives_empty_count():
     assert count_by_event([]) == {}
 
 
-def load_sample_records():
-    """Lit, route, filtre et normalise les trois fichiers d'exemple."""
-    paths = [
-        "data/samples/auth.log",
-        "data/samples/app_events.jsonl",
-        "data/samples/connections.csv",
-    ]
-    records = []
-    for source, number, line in read_sources(paths):
-        records.append(route_line(source, line))
-    records = remove_invalid(records)
-    records = normalize_records(records)
-    records = keep_known_severity(records)
-    return list(records)
-
-
 def test_counts_on_sample_files():
     """Comptages obtenus sur les fichiers d'exemple."""
-    records = load_sample_records()
+    records = list(process_files(DEFAULT_FILES))
     assert len(records) == 49
     assert count_by_user(records) == {
         "admin": 9,

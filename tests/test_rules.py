@@ -1,6 +1,7 @@
 """Tests du moteur de règles de sécurité."""
 
 from log_engine.ip_analysis import load_blacklist
+from log_engine.pipeline import DEFAULT_FILES, process_files
 from log_engine.rules import (
     apply_security_rules,
     make_alert,
@@ -8,7 +9,6 @@ from log_engine.rules import (
     rule_brute_force,
     rule_privilege_escalation,
 )
-from tests.test_aggregation import load_sample_records
 
 
 def make_record(ip, event, user="admin"):
@@ -31,6 +31,16 @@ def test_rule_brute_force_uses_threshold():
     assert rule_brute_force(ATTACK, threshold=3) == [
         make_alert(
             "brute_force", "6.6.6.6", "3 échecs sur admin (attaque réussie)"
+        )
+    ]
+
+
+def test_rule_brute_force_failed_attack():
+    """Une attaque sans succès est signalée comme échouée."""
+    records = ATTACK[:3]
+    assert rule_brute_force(records, threshold=3) == [
+        make_alert(
+            "brute_force", "6.6.6.6", "3 échecs sur admin (attaque échouée)"
         )
     ]
 
@@ -102,7 +112,7 @@ def test_failing_rule_does_not_stop_the_others(caplog):
 def test_engine_on_sample_files():
     """Alertes produites sur les fichiers d'exemple."""
     alerts = apply_security_rules(
-        load_sample_records(),
+        list(process_files(DEFAULT_FILES)),
         rule_brute_force,
         rule_blacklisted_ips,
         rule_privilege_escalation,

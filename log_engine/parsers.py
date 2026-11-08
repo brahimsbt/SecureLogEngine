@@ -121,7 +121,7 @@ def parse_connection_fields(fields: tuple):
         timestamp = parse_timestamp(fields[0])
         connection = make_connection(fields[1], fields[2], fields[3])
         destination_port = int(fields[4])
-    except ValueError:
+    except (ValueError, TypeError):
         return None
 
     if fields[5] == "ACCEPTED":
