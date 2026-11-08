@@ -3,6 +3,7 @@
 import pytest
 
 from log_engine.bruteforce import (
+    describe_attacks,
     detect_brute_force,
     group_attempts_by_ip,
     has_consecutive_failures,
@@ -77,3 +78,77 @@ def test_detection_on_sample_files():
         "198.51.100.23",
     }
     assert detect_brute_force(records, threshold=7) == set()
+
+
+def make_attempt(ip, event, user="admin"):
+    """Crée une tentative de connexion de test avec un utilisateur."""
+    return {"connection": (ip, 22, "TCP"), "event": event, "user": user}
+
+
+def test_several_attackers_at_the_same_time():
+    """Deux attaquants entremêlés sont détectés tous les deux."""
+    records = []
+    for i in range(3):
+        records.append(make_attempt("6.6.6.6", "AUTH_FAILURE"))
+        records.append(make_attempt("7.7.7.7", "AUTH_FAILURE"))
+    assert detect_brute_force(records, threshold=3) == {"6.6.6.6", "7.7.7.7"}
+
+
+def test_threshold_of_one():
+    """Avec un seuil de 1, un seul échec suffit."""
+    records = [make_attempt("6.6.6.6", "AUTH_FAILURE")]
+    assert detect_brute_force(records, threshold=1) == {"6.6.6.6"}
+
+
+def test_success_then_failures():
+    """Des échecs après un succès sont comptés à partir de zéro."""
+    records = [make_attempt("6.6.6.6", "AUTH_SUCCESS")]
+    for i in range(3):
+        records.append(make_attempt("6.6.6.6", "AUTH_FAILURE"))
+    assert detect_brute_force(records, threshold=3) == {"6.6.6.6"}
+    assert describe_attacks(records, threshold=3)[0]["succeeded"] is False
+
+
+def test_attack_without_success():
+    """Une attaque qui n'aboutit jamais est marquée comme échouée."""
+    records = []
+    for i in range(5):
+        records.append(make_attempt("6.6.6.6", "AUTH_FAILURE", "root"))
+    assert describe_attacks(records) == [
+        {
+            "ip": "6.6.6.6",
+            "users": {"root"},
+            "failures": 5,
+            "succeeded": False,
+        }
+    ]
+
+
+def test_attack_on_several_accounts():
+    """Tous les comptes visés par l'attaquant sont listés."""
+    records = [
+        make_attempt("6.6.6.6", "AUTH_FAILURE", "admin"),
+        make_attempt("6.6.6.6", "AUTH_FAILURE", "root"),
+        make_attempt("6.6.6.6", "AUTH_FAILURE", "admin"),
+    ]
+    attack = describe_attacks(records, threshold=3)[0]
+    assert attack["users"] == {"admin", "root"}
+    assert attack["failures"] == 3
+
+
+def test_describe_attacks_with_no_attack():
+    """Aucune attaque détectée donne une liste vide."""
+    assert describe_attacks([make_attempt("1.1.1.1", "AUTH_SUCCESS")]) == []
+
+
+def test_describe_attacks_on_sample_files():
+    """L'attaque de 203.0.113.45 sur admin a réussi après 6 échecs."""
+    records = load_sample_records()
+    assert describe_attacks(records) == [
+        {
+            "ip": "203.0.113.45",
+            "users": {"admin"},
+            "failures": 6,
+            "succeeded": True,
+        }
+    ]

@@ -42,3 +42,31 @@ def detect_brute_force(records, threshold: int = 5):
         if has_consecutive_failures(ip_attempts, threshold):
             suspects.add(ip)
     return suspects
+
+
+def describe_attacks(records, threshold: int = 5):
+    """Décrit chaque attaque détectée : comptes visés, échecs, réussite."""
+    records = list(records)
+    attacks = []
+    for ip in sorted(detect_brute_force(records, threshold)):
+        users = set()
+        failures = 0
+        succeeded = False
+        for record in records:
+            if record["connection"][0] != ip:
+                continue
+            if record["event"] == "AUTH_FAILURE":
+                failures += 1
+                if record["user"] is not None:
+                    users.add(record["user"])
+            elif record["event"] == "AUTH_SUCCESS" and failures >= threshold:
+                succeeded = True
+        attacks.append(
+            {
+                "ip": ip,
+                "users": users,
+                "failures": failures,
+                "succeeded": succeeded,
+            }
+        )
+    return attacks
