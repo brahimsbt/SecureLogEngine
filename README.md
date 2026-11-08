@@ -61,6 +61,7 @@ log_engine/
   router.py              routage des événements avec match-case
   aggregation.py         comptage des événements avec defaultdict
   ip_analysis.py         analyse des IP avec set et frozenset
+  bruteforce.py          détection des attaques par force brute
 data/samples/            fichiers de logs d'exemple
 scripts/memory_demo.py   démonstration de la mémoire utilisée
 tests/                   tests pytest
@@ -93,7 +94,7 @@ programme.
 - [x] Parsing et routage (`match-case`)
 - [x] Filtrage et transformation (`map`, `filter`, `lambda`)
 - [x] Statistiques (`set`, `frozenset`, `defaultdict`)
-- [ ] Détection de force brute
+- [x] Détection de force brute
 - [ ] Moteur de règles (`*args`, `**kwargs`)
 - [ ] Audit (`globals()`, `locals()`)
 - [ ] Interface en ligne de commande complète
