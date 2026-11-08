@@ -56,6 +56,7 @@ log_engine/
   cli.py                 ligne de commande
   ingestion/readers.py   lecture des fichiers
   parsers.py             conversion des lignes en dictionnaires
+  filters.py             nettoyage des données avec filter()
 data/samples/            fichiers de logs d'exemple
 scripts/memory_demo.py   démonstration de la mémoire utilisée
 tests/                   tests pytest
